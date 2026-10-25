@@ -1,5 +1,6 @@
 const express = require('express');
 const Chocolate = require('../models/Chocolate');
+const Manufacturer = require('../models/Manufacturer');
 
 const router = express.Router();
 
@@ -20,12 +21,18 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
+  if (!(await Manufacturer.exists({ _id: req.body.manufacturer }))) {
+    return res.status(400).json({ message: 'Manufacturer does not exist' });
+  }
   const chocolate = await Chocolate.create(req.body);
   await chocolate.populate('manufacturer');
   res.status(201).json(chocolate);
 });
 
 router.put('/:id', async (req, res) => {
+  if (req.body.manufacturer && !(await Manufacturer.exists({ _id: req.body.manufacturer }))) {
+    return res.status(400).json({ message: 'Manufacturer does not exist' });
+  }
   const chocolate = await Chocolate.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true
