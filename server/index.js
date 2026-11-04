@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const manufacturerRoutes = require('./routes/manufacturers');
 const chocolateRoutes = require('./routes/chocolates');
+const authRoutes = require('./routes/auth');
+const { verifyToken } = require('./middleware/auth');
 
 const app = express();
 app.use(cors());
@@ -11,11 +13,13 @@ app.use(express.json());
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));
 
-app.use('/api/manufacturers', manufacturerRoutes);
-app.use('/api/chocolates', chocolateRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/manufacturers', verifyToken, manufacturerRoutes);
+app.use('/api/chocolates', verifyToken, chocolateRoutes);
 
 app.use((err, req, res, next) => {
   if (err.name === 'ValidationError') return res.status(400).json({ message: err.message });
+  if (err.code === 11000) return res.status(409).json({ message: 'Username or email already taken' });
   if (err.name === 'CastError') return res.status(400).json({ message: 'Invalid ID' });
   console.error(err);
   res.status(500).json({ message: 'Server error' });

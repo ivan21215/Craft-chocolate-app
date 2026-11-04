@@ -1,6 +1,7 @@
 const express = require('express');
 const Manufacturer = require('../models/Manufacturer');
 const Chocolate = require('../models/Chocolate');
+const { requireAdmin } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -17,12 +18,12 @@ router.get('/:id', async (req, res) => {
   res.json({ ...manufacturer.toObject(), chocolates });
 });
 
-router.post('/', async (req, res) => {
+router.post('/', requireAdmin, async (req, res) => {
   const manufacturer = await Manufacturer.create(req.body);
   res.status(201).json(manufacturer);
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', requireAdmin, async (req, res) => {
   const manufacturer = await Manufacturer.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true
@@ -31,7 +32,7 @@ router.put('/:id', async (req, res) => {
   res.json(manufacturer);
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', requireAdmin, async (req, res) => {
   const count = await Chocolate.countDocuments({ manufacturer: req.params.id });
   if (count > 0) {
     return res.status(400).json({

@@ -1,6 +1,7 @@
 const express = require('express');
 const Chocolate = require('../models/Chocolate');
 const Manufacturer = require('../models/Manufacturer');
+const { requireAdmin } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -20,7 +21,7 @@ router.get('/:id', async (req, res) => {
   res.json(chocolate);
 });
 
-router.post('/', async (req, res) => {
+router.post('/', requireAdmin, async (req, res) => {
   if (!(await Manufacturer.exists({ _id: req.body.manufacturer }))) {
     return res.status(400).json({ message: 'Manufacturer does not exist' });
   }
@@ -29,7 +30,7 @@ router.post('/', async (req, res) => {
   res.status(201).json(chocolate);
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', requireAdmin, async (req, res) => {
   if (req.body.manufacturer && !(await Manufacturer.exists({ _id: req.body.manufacturer }))) {
     return res.status(400).json({ message: 'Manufacturer does not exist' });
   }
@@ -41,7 +42,7 @@ router.put('/:id', async (req, res) => {
   res.json(chocolate);
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', requireAdmin, async (req, res) => {
   const chocolate = await Chocolate.findByIdAndDelete(req.params.id);
   if (!chocolate) return res.status(404).json({ message: 'Chocolate not found' });
   res.json({ message: 'Chocolate deleted' });
