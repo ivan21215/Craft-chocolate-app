@@ -71,3 +71,37 @@ input, select, textarea {
 
 .error,
 .form .error { color: var(--error); margin: 0; font-size: 0.95rem; }
+
+h1 { margin: 0 0 20px; }
+
+.muted { color: var(--muted); }
+.price { font-weight: 700; color: var(--accent); margin: 0; }
+
+.group { margin-bottom: 32px; }
+.group h2 { font-size: 1.2rem; margin: 0 0 12px; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px;
+}
+
+.card {
+  display: block;
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  transition: box-shadow 0.15s, transform 0.15s;
+}
+.card:hover { text-decoration: none; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08); transform: translateY(-2px); }
+.card h3 { margin: 0 0 6px; font-size: 1.05rem; }
+.card p { margin: 0 0 8px; font-size: 0.9rem; }
+
+.details { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 24px; }
+.details h1 { margin: 12px 0 6px; }
+.details dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin: 20px 0; }
+.details dt { color: var(--muted); }
+.details dd { margin: 0; }
+.details .logo { max-height: 80px; margin-top: 12px; }

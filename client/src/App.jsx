@@ -5,6 +5,9 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
+import ChocolateDetails from './pages/ChocolateDetails';
+import Manufacturers from './pages/Manufacturers';
+import ManufacturerDetails from './pages/ManufacturerDetails';
 
 export default function App() {
   return (
@@ -18,6 +21,9 @@ export default function App() {
 
             <Route element={<ProtectedRoute />}>
               <Route path="/" element={<Home />} />
+              <Route path="/chocolates/:id" element={<ChocolateDetails />} />
+              <Route path="/manufacturers" element={<Manufacturers />} />
+              <Route path="/manufacturers/:id" element={<ManufacturerDetails />} />
             </Route>
 
             <Route path="*" element={<Navigate to="/" replace />} />
