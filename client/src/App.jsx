@@ -8,6 +8,8 @@ import Home from './pages/Home';
 import ChocolateDetails from './pages/ChocolateDetails';
 import Manufacturers from './pages/Manufacturers';
 import ManufacturerDetails from './pages/ManufacturerDetails';
+import ChocolateForm from './pages/ChocolateForm';
+import ManufacturerForm from './pages/ManufacturerForm';
 
 export default function App() {
   return (
@@ -24,6 +26,13 @@ export default function App() {
               <Route path="/chocolates/:id" element={<ChocolateDetails />} />
               <Route path="/manufacturers" element={<Manufacturers />} />
               <Route path="/manufacturers/:id" element={<ManufacturerDetails />} />
+            </Route>
+
+            <Route element={<ProtectedRoute adminOnly />}>
+              <Route path="/chocolates/new" element={<ChocolateForm />} />
+              <Route path="/chocolates/:id/edit" element={<ChocolateForm />} />
+              <Route path="/manufacturers/new" element={<ManufacturerForm />} />
+              <Route path="/manufacturers/:id/edit" element={<ManufacturerForm />} />
             </Route>
 
             <Route path="*" element={<Navigate to="/" replace />} />

@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api';
+import { useAuth } from '../context/AuthContext';
 
 export default function Manufacturers() {
   const [manufacturers, setManufacturers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
   useEffect(() => {
     api.get('/manufacturers')
@@ -16,7 +18,10 @@ export default function Manufacturers() {
 
   return (
     <>
-      <h1>Manufacturers</h1>
+      <div className="page-header">
+        <h1>Manufacturers</h1>
+        {user?.role === 'admin' && <Link to="/manufacturers/new" className="button">+ Add manufacturer</Link>}
+      </div>
       <div className="grid">
         {manufacturers.map(m => (
           <Link key={m._id} to={`/manufacturers/${m._id}`} className="card">
