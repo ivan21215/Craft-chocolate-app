@@ -26,6 +26,12 @@ export default function Home() {
 
   return (
     <>
+      <section className="hero">
+        <p className="eyebrow">Craft Chocolate</p>
+        <h1>Handcrafted chocolate<br />from the world's finest makers</h1>
+        <p>{chocolates.length} bars · {groups.length} makers</p>
+      </section>
+
       <div className="page-header">
         <h1>Chocolates</h1>
         {user?.role === 'admin' && <Link to="/chocolates/new" className="button">+ Add chocolate</Link>}
