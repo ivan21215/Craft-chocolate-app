@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
+import { useShop } from '../context/ShopContext';
 
 export default function ChocolateDetails() {
   const { id } = useParams();
@@ -9,6 +10,8 @@ export default function ChocolateDetails() {
   const [error, setError] = useState('');
   const [actionError, setActionError] = useState('');
   const { user } = useAuth();
+  const { addToCart, isFavorite, toggleFavorite } = useShop();
+  const [added, setAdded] = useState(false);
   const navigate = useNavigate();
   const isAdmin = user?.role === 'admin';
 
@@ -26,6 +29,11 @@ export default function ChocolateDetails() {
     } catch (err) {
       setActionError(err.response?.data?.message || 'Could not delete chocolate');
     }
+  };
+
+  const handleAddToCart = async () => {
+    await addToCart(id);
+    setAdded(true);
   };
 
   if (error) return <p className="error">{error}</p>;
@@ -51,6 +59,14 @@ export default function ChocolateDetails() {
       </dl>
 
       {chocolate.description && <p>{chocolate.description}</p>}
+
+      <div className="actions">
+        <button onClick={handleAddToCart}>Add to cart</button>
+        <button className="secondary" onClick={() => toggleFavorite(id)}>
+          {isFavorite(id) ? '♥ Remove from favorites' : '♡ Add to favorites'}
+        </button>
+        {added && <span className="muted">Added to cart ✓</span>}
+      </div>
 
       {isAdmin && (
         <div className="actions">

@@ -1,6 +1,7 @@
 const express = require('express');
 const Chocolate = require('../models/Chocolate');
 const Manufacturer = require('../models/Manufacturer');
+const User = require('../models/User');
 const { requireAdmin } = require('../middleware/auth');
 
 const router = express.Router();
@@ -45,6 +46,8 @@ router.put('/:id', requireAdmin, async (req, res) => {
 router.delete('/:id', requireAdmin, async (req, res) => {
   const chocolate = await Chocolate.findByIdAndDelete(req.params.id);
   if (!chocolate) return res.status(404).json({ message: 'Chocolate not found' });
+
+  await User.updateMany({}, { $pull: { favorites: chocolate._id, cart: { chocolate: chocolate._id } } });
   res.json({ message: 'Chocolate deleted' });
 });
 

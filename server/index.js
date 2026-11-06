@@ -5,7 +5,9 @@ const cors = require('cors');
 const manufacturerRoutes = require('./routes/manufacturers');
 const chocolateRoutes = require('./routes/chocolates');
 const authRoutes = require('./routes/auth');
-const { verifyToken } = require('./middleware/auth');
+const meRoutes = require('./routes/me');
+const userRoutes = require('./routes/users');
+const { verifyToken, requireAdmin } = require('./middleware/auth');
 
 const app = express();
 app.use(cors());
@@ -16,6 +18,8 @@ app.get('/api/health', (req, res) => res.json({ ok: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/manufacturers', verifyToken, manufacturerRoutes);
 app.use('/api/chocolates', verifyToken, chocolateRoutes);
+app.use('/api/me', verifyToken, meRoutes);
+app.use('/api/users', verifyToken, requireAdmin, userRoutes);
 
 app.use((err, req, res, next) => {
   if (err.name === 'ValidationError') return res.status(400).json({ message: err.message });

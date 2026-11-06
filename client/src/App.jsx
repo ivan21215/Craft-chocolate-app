@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import AuthProvider from './context/AuthProvider';
+import ShopProvider from './context/ShopProvider';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
@@ -10,35 +11,43 @@ import Manufacturers from './pages/Manufacturers';
 import ManufacturerDetails from './pages/ManufacturerDetails';
 import ChocolateForm from './pages/ChocolateForm';
 import ManufacturerForm from './pages/ManufacturerForm';
+import Cart from './pages/Cart';
+import Favorites from './pages/Favorites';
+import Users from './pages/Users';
 
 export default function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Navbar />
-        <main className="container">
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+      <ShopProvider>
+        <BrowserRouter>
+          <Navbar />
+          <main className="container">
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
 
-            <Route element={<ProtectedRoute />}>
-              <Route path="/" element={<Home />} />
-              <Route path="/chocolates/:id" element={<ChocolateDetails />} />
-              <Route path="/manufacturers" element={<Manufacturers />} />
-              <Route path="/manufacturers/:id" element={<ManufacturerDetails />} />
-            </Route>
+              <Route element={<ProtectedRoute />}>
+                <Route path="/" element={<Home />} />
+                <Route path="/chocolates/:id" element={<ChocolateDetails />} />
+                <Route path="/manufacturers" element={<Manufacturers />} />
+                <Route path="/manufacturers/:id" element={<ManufacturerDetails />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/favorites" element={<Favorites />} />
+              </Route>
 
-            <Route element={<ProtectedRoute adminOnly />}>
-              <Route path="/chocolates/new" element={<ChocolateForm />} />
-              <Route path="/chocolates/:id/edit" element={<ChocolateForm />} />
-              <Route path="/manufacturers/new" element={<ManufacturerForm />} />
-              <Route path="/manufacturers/:id/edit" element={<ManufacturerForm />} />
-            </Route>
+              <Route element={<ProtectedRoute adminOnly />}>
+                <Route path="/chocolates/new" element={<ChocolateForm />} />
+                <Route path="/chocolates/:id/edit" element={<ChocolateForm />} />
+                <Route path="/manufacturers/new" element={<ManufacturerForm />} />
+                <Route path="/manufacturers/:id/edit" element={<ManufacturerForm />} />
+                <Route path="/users" element={<Users />} />
+              </Route>
 
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </main>
-      </BrowserRouter>
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </main>
+        </BrowserRouter>
+      </ShopProvider>
     </AuthProvider>
   );
 }
